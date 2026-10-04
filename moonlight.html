@@ -1,0 +1,3306 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>کافه مون‌لایت | Moonlight Café</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.8;
+    overflow-x:hidden;
+    transition:.35s;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+/* =========================
+   THEMES
+========================= */
+
+:root{
+    --bg:#09101f;
+    --bg2:#10182f;
+    --card:rgba(20,30,55,.82);
+    --solid:#151f38;
+    --text:#f7f3e9;
+    --muted:#b9bfd0;
+    --accent:#ffd66b;
+    --accent2:#9fc7ff;
+    --border:rgba(255,255,255,.12);
+    --shadow:0 15px 45px rgba(0,0,0,.35);
+    --moon:#fff2b5;
+    --star:#fff7cf;
+    --buttonText:#111827;
+}
+
+body.theme-light{
+    --bg:#f5efe4;
+    --bg2:#fffaf1;
+    --card:rgba(255,255,255,.88);
+    --solid:#fff;
+    --text:#27231d;
+    --muted:#70685e;
+    --accent:#a86f1e;
+    --accent2:#6e8fc4;
+    --border:rgba(50,40,20,.12);
+    --shadow:0 15px 40px rgba(60,45,20,.15);
+    --moon:#ffe3a1;
+    --star:#d19a38;
+    --buttonText:#fff;
+}
+
+body.theme-ocean{
+    --bg:#041b2d;
+    --bg2:#073552;
+    --card:rgba(8,47,72,.86);
+    --solid:#0b3c5d;
+    --text:#e9fbff;
+    --muted:#a8d4df;
+    --accent:#62e5ff;
+    --accent2:#7fbfff;
+    --border:rgba(100,230,255,.16);
+    --moon:#bff6ff;
+    --star:#d5faff;
+    --buttonText:#06212d;
+}
+
+body.theme-galaxy{
+    --bg:#10051d;
+    --bg2:#210d3b;
+    --card:rgba(40,19,65,.88);
+    --solid:#2b1547;
+    --text:#faf0ff;
+    --muted:#c8b4d8;
+    --accent:#d69cff;
+    --accent2:#8fb4ff;
+    --border:rgba(210,150,255,.18);
+    --moon:#e0b8ff;
+    --star:#f4dfff;
+    --buttonText:#190723;
+}
+
+body.theme-forest{
+    --bg:#071b12;
+    --bg2:#0d3020;
+    --card:rgba(16,54,37,.88);
+    --solid:#123d29;
+    --text:#effff4;
+    --muted:#b0cbb9;
+    --accent:#a7e27d;
+    --accent2:#7fd3ad;
+    --border:rgba(150,230,170,.16);
+    --moon:#d9f7b8;
+    --star:#e8ffd9;
+    --buttonText:#10210f;
+}
+
+body.theme-rose{
+    --bg:#230b18;
+    --bg2:#421126;
+    --card:rgba(66,20,42,.88);
+    --solid:#48172e;
+    --text:#fff0f5;
+    --muted:#dab8c5;
+    --accent:#ff9fbd;
+    --accent2:#e7a5ff;
+    --border:rgba(255,170,200,.16);
+    --moon:#ffd0df;
+    --star:#ffe4ed;
+    --buttonText:#280914;
+}
+
+body.theme-sunset{
+    --bg:#25100a;
+    --bg2:#48200d;
+    --card:rgba(70,31,16,.88);
+    --solid:#4b2411;
+    --text:#fff5e8;
+    --muted:#dfc2a9;
+    --accent:#ffb45c;
+    --accent2:#ff7d62;
+    --border:rgba(255,180,100,.16);
+    --moon:#ffd28b;
+    --star:#ffe8b7;
+    --buttonText:#2a1206;
+}
+
+body.theme-sky{
+    --bg:#dff2ff;
+    --bg2:#b9e3ff;
+    --card:rgba(255,255,255,.78);
+    --solid:#fff;
+    --text:#173044;
+    --muted:#587184;
+    --accent:#287fc5;
+    --accent2:#55a9df;
+    --border:rgba(30,90,130,.14);
+    --moon:#fff4bd;
+    --star:#fff;
+    --buttonText:#fff;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+    background:radial-gradient(
+        circle at 50% 10%,
+        var(--bg2),
+        var(--bg) 65%
+    );
+}
+
+.moon{
+    position:absolute;
+    width:230px;
+    height:230px;
+    border-radius:50%;
+    top:75px;
+    left:8%;
+    background:var(--moon);
+    box-shadow:
+        0 0 35px var(--moon),
+        0 0 90px var(--moon);
+    animation:moonGlow 4s ease-in-out infinite;
+}
+
+@keyframes moonGlow{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.025)}
+}
+
+.cloud{
+    position:absolute;
+    width:280px;
+    height:65px;
+    border-radius:100px;
+    background:rgba(255,255,255,.045);
+    filter:blur(2px);
+    animation:cloudMove 35s linear infinite;
+}
+
+.cloud::before,
+.cloud::after{
+    content:"";
+    position:absolute;
+    background:inherit;
+    border-radius:50%;
+}
+
+.cloud::before{
+    width:120px;
+    height:120px;
+    top:-55px;
+    right:50px;
+}
+
+.cloud::after{
+    width:90px;
+    height:90px;
+    top:-35px;
+    right:150px;
+}
+
+.cloud.one{
+    top:22%;
+    right:-320px;
+}
+
+.cloud.two{
+    top:48%;
+    right:-500px;
+    animation-delay:-15s;
+}
+
+@keyframes cloudMove{
+    from{transform:translateX(0)}
+    to{transform:translateX(-150vw)}
+}
+
+/* =========================
+   STARS
+========================= */
+
+.stars,
+.stars::before,
+.stars::after{
+    position:absolute;
+    inset:0;
+    content:"";
+}
+
+.stars{
+    background-image:
+        radial-gradient(circle,var(--star) 1px,transparent 1.5px),
+        radial-gradient(circle,var(--star) 1px,transparent 1.5px),
+        radial-gradient(circle,var(--star) 1.5px,transparent 2px);
+    background-size:140px 140px,220px 220px,310px 310px;
+    background-position:10px 30px,80px 100px,150px 40px;
+    opacity:.65;
+    animation:starsMove 30s linear infinite;
+}
+
+@keyframes starsMove{
+    from{transform:translateY(0)}
+    to{transform:translateY(60px)}
+}
+
+.stars::before{
+    background-image:
+        radial-gradient(circle,var(--star) 1px,transparent 1.5px);
+    background-size:180px 180px;
+    animation:twinkle 2.7s ease-in-out infinite alternate;
+}
+
+.stars::after{
+    background-image:
+        radial-gradient(circle,var(--star) 1.5px,transparent 2px);
+    background-size:270px 270px;
+    animation:twinkle 4s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes twinkle{
+    from{opacity:.2}
+    to{opacity:.9}
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(18px);
+    background:color-mix(in srgb,var(--bg) 78%,transparent);
+    border-bottom:1px solid var(--border);
+}
+
+.nav-inner{
+    max-width:1200px;
+    margin:auto;
+    min-height:72px;
+    padding:0 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    color:var(--text);
+    text-decoration:none;
+    font-size:1.25rem;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.logo span{
+    color:var(--accent);
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    list-style:none;
+}
+
+.nav-links a{
+    color:var(--muted);
+    text-decoration:none;
+    padding:9px 12px;
+    border-radius:10px;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:var(--text);
+    background:var(--border);
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.icon-btn,
+.menu-toggle{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+}
+
+.menu-toggle{
+    display:none;
+}
+
+/* =========================
+   THEME
+========================= */
+
+.theme-wrap{
+    position:relative;
+}
+
+.theme-panel{
+    position:absolute;
+    top:52px;
+    left:0;
+    width:245px;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--solid);
+    box-shadow:var(--shadow);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-8px);
+    transition:.2s;
+}
+
+.theme-panel.open{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.theme-option{
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text);
+    padding:9px;
+    border-radius:10px;
+}
+
+.theme-option.active,
+.theme-option:hover{
+    border-color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 15%,transparent);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:650px;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    padding:90px 20px 70px;
+}
+
+.hero-content{
+    max-width:850px;
+}
+
+.hero-badge{
+    display:inline-block;
+    padding:7px 15px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    color:var(--accent);
+    background:var(--card);
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(3rem,9vw,7rem);
+    line-height:1;
+    margin-bottom:20px;
+}
+
+.hero h1 span{
+    color:var(--accent);
+    text-shadow:0 0 25px var(--accent);
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:1.2rem;
+    max-width:650px;
+    margin:0 auto 30px;
+}
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.btn{
+    border:0;
+    border-radius:13px;
+    padding:12px 20px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    transition:.25s;
+}
+
+.btn-primary{
+    background:var(--accent);
+    color:var(--buttonText);
+}
+
+.btn-secondary{
+    color:var(--text);
+    background:var(--card);
+    border:1px solid var(--border);
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    max-width:1200px;
+    margin:auto;
+    padding:80px 20px;
+}
+
+.section-heading{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.section-heading h2{
+    font-size:clamp(2rem,5vw,3rem);
+    margin-bottom:7px;
+}
+
+.section-heading p{
+    color:var(--muted);
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status-card{
+    max-width:850px;
+    margin:0 auto 30px;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:var(--card);
+    text-align:center;
+    box-shadow:var(--shadow);
+}
+
+.status-dot{
+    width:12px;
+    height:12px;
+    display:inline-block;
+    border-radius:50%;
+    margin-left:7px;
+    background:#35d07f;
+    box-shadow:0 0 12px #35d07f;
+}
+
+.status-dot.closed{
+    background:#ef6b6b;
+    box-shadow:0 0 12px #ef6b6b;
+}
+
+.status-main{
+    font-weight:800;
+    font-size:1.1rem;
+}
+
+.status-time{
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box{
+    max-width:700px;
+    margin:0 auto 25px;
+}
+
+.search-box input{
+    width:100%;
+    padding:15px 18px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    outline:none;
+    background:var(--card);
+    color:var(--text);
+}
+
+.search-box input:focus{
+    border-color:var(--accent);
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+
+.categories{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:9px;
+    margin-bottom:35px;
+}
+
+.category-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    padding:9px 15px;
+    border-radius:999px;
+}
+
+.category-btn.active,
+.category-btn:hover{
+    background:var(--accent);
+    color:var(--buttonText);
+    border-color:var(--accent);
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,360px));
+    justify-content:center;
+    gap:22px;
+}
+
+.menu-card{
+    width:100%;
+    overflow:hidden;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    transition:.3s;
+}
+
+.menu-card:hover{
+    transform:translateY(-7px);
+    border-color:var(--accent);
+}
+
+.menu-image-wrap{
+    position:relative;
+}
+
+.menu-card img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    background:var(--solid);
+}
+
+.favorite-btn{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:50%;
+    background:rgba(0,0,0,.58);
+    color:white;
+    font-size:1.15rem;
+}
+
+.favorite-btn.active{
+    color:#ff668d;
+}
+
+.badge{
+    position:absolute;
+    top:12px;
+    left:12px;
+    padding:4px 9px;
+    border-radius:999px;
+    background:var(--accent);
+    color:var(--buttonText);
+    font-size:.78rem;
+    font-weight:700;
+}
+
+.menu-info{
+    padding:18px;
+}
+
+.menu-info h3{
+    font-size:1.25rem;
+    margin-bottom:4px;
+}
+
+.menu-info p{
+    color:var(--muted);
+    font-size:.92rem;
+    min-height:54px;
+}
+
+.menu-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:15px;
+}
+
+.price{
+    color:var(--accent);
+    font-weight:800;
+    font-size:1.1rem;
+}
+
+.details-btn{
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text);
+    border-radius:10px;
+    padding:8px 12px;
+}
+
+.empty-message{
+    text-align:center;
+    color:var(--muted);
+    padding:30px;
+    display:none;
+}
+
+/* =========================
+   SPECIAL
+========================= */
+
+.special-card{
+    max-width:900px;
+    margin:auto;
+    padding:30px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    align-items:center;
+    border-radius:25px;
+    border:1px solid var(--border);
+    background:var(--card);
+    box-shadow:var(--shadow);
+}
+
+.special-card img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    border-radius:18px;
+}
+
+.special-text h3{
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.special-text p{
+    color:var(--muted);
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.gallery-grid img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    border-radius:18px;
+    border:1px solid var(--border);
+    transition:.3s;
+}
+
+.gallery-grid img:hover{
+    transform:scale(1.025);
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+.review-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.review{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+}
+
+.stars-review{
+    color:var(--accent);
+}
+
+.review p{
+    color:var(--muted);
+}
+
+.review strong{
+    display:block;
+    margin-top:12px;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.info-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+}
+
+.info-card h3{
+    margin-bottom:8px;
+}
+
+.info-card p{
+    color:var(--muted);
+}
+
+/* =========================
+   FAQ
+========================= */
+
+.faq{
+    max-width:850px;
+    margin:auto;
+}
+
+.faq details{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:16px 18px;
+    margin-bottom:10px;
+}
+
+.faq summary{
+    cursor:pointer;
+    font-weight:700;
+}
+
+.faq p{
+    color:var(--muted);
+    padding-top:10px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    display:grid;
+    place-items:center;
+    padding:20px;
+    background:rgba(0,0,0,.72);
+    opacity:0;
+    visibility:hidden;
+    transition:.25s;
+}
+
+.modal.open{
+    opacity:1;
+    visibility:visible;
+}
+
+.modal-content{
+    width:min(900px,100%);
+    max-height:90vh;
+    overflow-y:auto;
+    background:var(--solid);
+    border:1px solid var(--border);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    position:relative;
+    padding:22px;
+}
+
+.close-modal{
+    position:absolute;
+    top:12px;
+    left:12px;
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:50%;
+    background:var(--card);
+    color:var(--text);
+    font-size:1.4rem;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.detail-grid img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    border-radius:18px;
+}
+
+.detail-info h2{
+    font-size:2rem;
+}
+
+.detail-price{
+    color:var(--accent);
+    font-size:1.3rem;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.detail-info p{
+    color:var(--muted);
+}
+
+.detail-list{
+    list-style:none;
+    margin:15px 0;
+}
+
+.detail-list li{
+    color:var(--muted);
+    margin-bottom:6px;
+}
+
+.related-title{
+    margin-top:30px;
+    margin-bottom:15px;
+}
+
+.related-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.related-item{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.related-item img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+}
+
+.related-item span{
+    display:block;
+    padding:8px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    border-top:1px solid var(--border);
+    padding:45px 20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.footer-title{
+    color:var(--text);
+    font-size:1.4rem;
+    font-weight:800;
+}
+
+.footer-links{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin:15px 0;
+}
+
+.footer-links a{
+    color:var(--muted);
+    text-decoration:none;
+}
+
+.footer-links a:hover{
+    color:var(--accent);
+}
+
+/* =========================
+   TOP BUTTON
+========================= */
+
+#topBtn{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    z-index:1200;
+    width:46px;
+    height:46px;
+    border:1px solid var(--border);
+    border-radius:50%;
+    background:var(--solid);
+    color:var(--text);
+    opacity:0;
+    visibility:hidden;
+}
+
+#topBtn.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(25px);
+    transition:.7s;
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .nav-links{
+        position:absolute;
+        top:72px;
+        right:15px;
+        left:15px;
+        padding:12px;
+        border-radius:18px;
+        background:var(--solid);
+        border:1px solid var(--border);
+        box-shadow:var(--shadow);
+        flex-direction:column;
+        align-items:stretch;
+        display:none;
+    }
+
+    .nav-links.open{
+        display:flex;
+    }
+
+    .nav-links a{
+        text-align:center;
+    }
+
+    .menu-toggle{
+        display:grid;
+    }
+
+    .special-card{
+        grid-template-columns:1fr;
+    }
+
+    .review-grid,
+    .info-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .gallery-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .nav-inner{
+        padding:0 12px;
+    }
+
+    .hero{
+        min-height:570px;
+    }
+
+    .moon{
+        width:150px;
+        height:150px;
+        top:80px;
+        left:5%;
+    }
+
+    .hero h1{
+        font-size:3.3rem;
+    }
+
+    .hero p{
+        font-size:1rem;
+    }
+
+    section{
+        padding:60px 14px;
+    }
+
+    .menu-grid{
+        grid-template-columns:minmax(0,360px);
+    }
+
+    .review-grid,
+    .info-grid,
+    .gallery-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .related-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .theme-panel{
+        left:auto;
+        right:0;
+    }
+
+    .logo{
+        font-size:1rem;
+    }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms!important;
+        animation-iteration-count:1!important;
+        scroll-behavior:auto!important;
+        transition-duration:.01ms!important;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="stars"></div>
+    <div class="moon"></div>
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+<div class="nav-inner">
+
+<a class="logo" href="#home">
+🌙 <span>مون‌لایت</span> کافه
+</a>
+
+<ul class="nav-links" id="navLinks">
+<li><a href="#home">خانه</a></li>
+<li><a href="#menu">منو</a></li>
+<li><a href="#favorites">علاقه‌مندی‌ها</a></li>
+<li><a href="#gallery">گالری</a></li>
+<li><a href="#reviews">نظرات</a></li>
+<li><a href="#info">اطلاعات</a></li>
+<li><a href="#faq">سؤالات متداول</a></li>
+</ul>
+
+<div class="nav-actions">
+
+<div class="theme-wrap" id="themeWrap">
+
+<button
+class="icon-btn"
+id="themeButton"
+title="انتخاب تم"
+>
+🎨
+</button>
+
+<div class="theme-panel" id="themePanel">
+
+<button class="theme-option" data-theme="moonlight">
+🌙 مون‌لایت
+</button>
+
+<button class="theme-option" data-theme="light">
+☀️ روشن
+</button>
+
+<button class="theme-option" data-theme="ocean">
+💙 اقیانوس
+</button>
+
+<button class="theme-option" data-theme="galaxy">
+💜 کهکشان
+</button>
+
+<button class="theme-option" data-theme="forest">
+💚 جنگل
+</button>
+
+<button class="theme-option" data-theme="rose">
+🌹 رز
+</button>
+
+<button class="theme-option" data-theme="sunset">
+🧡 غروب
+</button>
+
+<button class="theme-option" data-theme="sky">
+🩵 آسمان
+</button>
+
+</div>
+</div>
+
+<button
+class="menu-toggle"
+id="menuToggle"
+>
+☰
+</button>
+
+</div>
+</div>
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero reveal" id="home">
+
+<div class="hero-content">
+
+<div class="hero-badge">
+✨ خوش آمدید به کافه مون‌لایت
+</div>
+
+<h1>
+<span>مون‌لایت</span><br>
+کافه
+</h1>
+
+<p>
+قهوه خوب. غذای خوب. لحظه‌های خوب.
+<br>
+یک جای دنج برای شب‌های آرام و روزهای خوش.
+</p>
+
+<div class="hero-buttons">
+
+<a href="#menu" class="btn btn-primary">
+🍽️ دیدن منو
+</a>
+
+<a href="#info" class="btn btn-secondary">
+📍 اطلاعات کافه
+</a>
+
+</div>
+
+</div>
+</header>
+
+
+<!-- STATUS -->
+
+<section class="reveal">
+
+<div class="status-card">
+
+<div class="status-main">
+
+<span
+class="status-dot"
+id="statusDot"
+></span>
+
+<span id="statusText">
+در حال بررسی...
+</span>
+
+</div>
+
+<div
+class="status-time"
+id="statusTime"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- MENU -->
+
+<section id="menu" class="reveal">
+
+<div class="section-heading">
+
+<h2>منوی ما</h2>
+
+<p>
+هر چیزی که برای یک لحظه خوب لازم دارید.
+</p>
+
+</div>
+
+<div class="search-box">
+
+<input
+type="search"
+id="searchInput"
+placeholder="🔎 جستجو در منو..."
+>
+
+</div>
+
+<div
+class="categories"
+id="categories"
+></div>
+
+<div
+class="menu-grid"
+id="menuGrid"
+></div>
+
+<div
+class="empty-message"
+id="menuEmpty"
+>
+چیزی پیدا نشد 😕
+</div>
+
+</section>
+
+
+<!-- FAVORITES -->
+
+<section id="favorites" class="reveal">
+
+<div class="section-heading">
+
+<h2>❤️ علاقه‌مندی‌های شما</h2>
+
+<p>
+غذاها و نوشیدنی‌های مورد علاقه‌تان اینجا ذخیره می‌شوند.
+</p>
+
+</div>
+
+<div
+class="menu-grid"
+id="favoritesGrid"
+></div>
+
+<div
+class="empty-message"
+id="favoritesEmpty"
+>
+هنوز چیزی به علاقه‌مندی‌ها اضافه نکرده‌اید ❤️
+</div>
+
+</section>
+
+
+<!-- SPECIAL -->
+
+<section class="reveal">
+
+<div class="section-heading">
+
+<h2>🌙 پیشنهاد مون‌لایت</h2>
+
+<p>
+یک انتخاب ویژه برای امشب.
+</p>
+
+</div>
+
+<div class="special-card">
+
+<img
+src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=1000&q=85"
+alt="میلک‌شیک شکلاتی"
+loading="lazy"
+>
+
+<div class="special-text">
+
+<h3>
+میلک‌شیک شکلاتی
+</h3>
+
+<p>
+یک میلک‌شیک خنک و خامه‌ای با طعم شکلات،
+مناسب برای یک شب آرام در کافه مون‌لایت.
+</p>
+
+<br>
+
+<strong class="price">
+۵۰۰ تومن
+</strong>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- GALLERY -->
+
+<section id="gallery" class="reveal">
+
+<div class="section-heading">
+
+<h2>📸 گالری</h2>
+
+<p>
+چند تصویر از غذاها و نوشیدنی‌های مون‌لایت.
+</p>
+
+</div>
+
+<div class="gallery-grid">
+
+<img
+src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
+alt="قهوه"
+loading="lazy"
+>
+
+<img
+src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85"
+alt="میلک‌شیک"
+loading="lazy"
+>
+
+<img
+src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=85"
+alt="دسر"
+loading="lazy"
+>
+
+<img
+src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=85"
+alt="پیتزا"
+loading="lazy"
+>
+
+<img
+src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85"
+alt="غذا"
+loading="lazy"
+>
+
+<img
+src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85"
+alt="دونات"
+loading="lazy"
+>
+
+</div>
+</section>
+
+
+<!-- REVIEWS -->
+
+<section id="reviews" class="reveal">
+
+<div class="section-heading">
+
+<h2>⭐ نظرات مشتری‌ها</h2>
+
+<p>
+نظرهایی نمونه برای طراحی سایت.
+</p>
+
+</div>
+
+<div class="review-grid">
+
+<article class="review">
+
+<div class="stars-review">
+★★★★★
+</div>
+
+<p>
+فضای خیلی دنج و قهوه واقعاً خوش‌طعم بود.
+</p>
+
+<strong>
+— سارا
+</strong>
+
+</article>
+
+
+<article class="review">
+
+<div class="stars-review">
+★★★★★
+</div>
+
+<p>
+میلک‌شیک‌ها خیلی خوب بودند و محیط کافه آرام بود.
+</p>
+
+<strong>
+— آرین
+</strong>
+
+</article>
+
+
+<article class="review">
+
+<div class="stars-review">
+★★★★☆
+</div>
+
+<p>
+یک جای خوب برای نشستن و وقت گذراندن با دوستان.
+</p>
+
+<strong>
+— نیما
+</strong>
+
+</article>
+
+</div>
+</section>
+
+
+<!-- INFO -->
+
+<section id="info" class="reveal">
+
+<div class="section-heading">
+
+<h2>📍 اطلاعات کافه</h2>
+
+<p>
+اطلاعات زیر قابل تغییر هستند.
+</p>
+
+</div>
+
+<div class="info-grid">
+
+<div class="info-card">
+<h3>📍 آدرس</h3>
+<p>
+آدرس واقعی کافه را اینجا وارد کنید.
+</p>
+</div>
+
+<div class="info-card">
+<h3>📞 تماس</h3>
+<p>
+شماره تلفن واقعی کافه را اینجا وارد کنید.
+</p>
+</div>
+
+<div class="info-card">
+<h3>📧 ایمیل</h3>
+<p>
+ایمیل واقعی کافه را اینجا وارد کنید.
+</p>
+</div>
+
+<div class="info-card">
+<h3>🚗 پارکینگ</h3>
+<p>
+اطلاعات پارکینگ کافه را اینجا وارد کنید.
+</p>
+</div>
+
+<div class="info-card">
+<h3>📶 وای‌فای</h3>
+<p>
+وای‌فای برای مشتریان در دسترس است.
+</p>
+</div>
+
+<div class="info-card">
+<h3>☕ درباره ما</h3>
+<p>
+مون‌لایت یک کافه دنج برای قهوه،
+غذا، دسر و وقت گذراندن با دوستان است.
+</p>
+</div>
+
+</div>
+</section>
+
+
+<!-- FAQ -->
+
+<section id="faq" class="reveal">
+
+<div class="section-heading">
+
+<h2>❓ سؤالات متداول</h2>
+
+<p>
+پاسخ چند سؤال رایج.
+</p>
+
+</div>
+
+<div class="faq">
+
+<details>
+<summary>
+ساعت کاری کافه چیست؟
+</summary>
+
+<p>
+ساعت کاری از تنظیمات داخل کد خوانده می‌شود.
+</p>
+</details>
+
+
+<details>
+<summary>
+آیا وای‌فای دارید؟
+</summary>
+
+<p>
+بله، اطلاعات وای‌فای را می‌توانید تغییر دهید.
+</p>
+</details>
+
+
+<details>
+<summary>
+آیا سایت روی موبایل کار می‌کند؟
+</summary>
+
+<p>
+بله. سایت برای موبایل، تبلت، لپ‌تاپ و کامپیوتر طراحی شده است.
+</p>
+</details>
+
+
+<details>
+<summary>
+آیا علاقه‌مندی‌ها ذخیره می‌شوند؟
+</summary>
+
+<p>
+بله. علاقه‌مندی‌ها در مرورگر ذخیره می‌شوند.
+</p>
+</details>
+
+</div>
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="footer-title">
+🌙 کافه مون‌لایت
+</div>
+
+<p>
+قهوه خوب. غذای خوب. لحظه‌های خوب.
+</p>
+
+<div class="footer-links">
+
+<a href="#home">خانه</a>
+<a href="#menu">منو</a>
+<a href="#gallery">گالری</a>
+<a href="#reviews">نظرات</a>
+<a href="#info">اطلاعات</a>
+<a href="#faq">سؤالات متداول</a>
+
+</div>
+
+<p>
+© ۲۰۲۶ کافه مون‌لایت
+</p>
+
+</footer>
+
+
+<!-- TOP -->
+
+<button id="topBtn">
+↑
+</button>
+
+
+<!-- MODAL -->
+
+<div class="modal" id="itemModal">
+
+<div class="modal-content">
+
+<button
+class="close-modal"
+id="closeModal"
+>
+×
+</button>
+
+<div class="detail-grid">
+
+<img
+id="modalImage"
+src=""
+alt=""
+>
+
+<div class="detail-info">
+
+<h2 id="modalName"></h2>
+
+<div
+class="detail-price"
+id="modalPrice"
+></div>
+
+<p id="modalDescription"></p>
+
+<ul class="detail-list">
+
+<li id="modalIngredients"></li>
+
+<li id="modalAllergens"></li>
+
+<li id="modalRating"></li>
+
+</ul>
+
+<button
+class="btn btn-primary"
+id="modalFavorite"
+>
+♡ افزودن به علاقه‌مندی‌ها
+</button>
+
+</div>
+</div>
+
+<h3 class="related-title">
+پیشنهادهای مشابه
+</h3>
+
+<div
+class="related-grid"
+id="relatedGrid"
+></div>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   MENU
+========================= */
+
+const menuItems = [
+
+{
+id:"oreo-shake",
+name:"میلک‌شیک اورئو",
+category:"shakes",
+price:450,
+description:"میلک‌شیک خامه‌ای با طعم اورئو و شکلات.",
+ingredients:"شیر، بستنی، اورئو، خامه",
+allergens:"حاوی شیر و گندم",
+rating:"★★★★★",
+badge:"محبوب",
+image:"https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"chocolate-shake",
+name:"میلک‌شیک شکلاتی",
+category:"shakes",
+price:500,
+description:"میلک‌شیک غلیظ و خنک با طعم شکلات.",
+ingredients:"شیر، بستنی شکلاتی، سس شکلات",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+badge:"پرفروش",
+image:"https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"nutella-shake",
+name:"میلک‌شیک نوتلا",
+category:"shakes",
+price:500,
+description:"میلک‌شیک خامه‌ای با طعم نوتلا.",
+ingredients:"شیر، بستنی، نوتلا، خامه",
+allergens:"حاوی شیر و فندق",
+rating:"★★★★★",
+badge:"ویژه",
+image:"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"strawberry-shake",
+name:"میلک‌شیک توت‌فرنگی",
+category:"shakes",
+price:450,
+description:"میلک‌شیک خنک با توت‌فرنگی تازه.",
+ingredients:"شیر، بستنی وانیلی، توت‌فرنگی",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+badge:"جدید",
+image:"https://images.unsplash.com/photo-1553787499-6f913324c102?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"vanilla-shake",
+name:"میلک‌شیک وانیلی",
+category:"shakes",
+price:400,
+description:"میلک‌شیک ساده و کلاسیک با وانیل.",
+ingredients:"شیر، بستنی وانیلی",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1553787499-6f913324c102?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"caramel-shake",
+name:"میلک‌شیک کاراملی",
+category:"shakes",
+price:450,
+description:"میلک‌شیک شیرین با سس کارامل.",
+ingredients:"شیر، بستنی، کارامل، خامه",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"banana-shake",
+name:"میلک‌شیک موزی",
+category:"shakes",
+price:450,
+description:"میلک‌شیک موزی خنک و خامه‌ای.",
+ingredients:"شیر، موز، بستنی",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1553530666-ba11a90a0868?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"coffee-shake",
+name:"میلک‌شیک قهوه",
+category:"shakes",
+price:500,
+description:"ترکیب قهوه و میلک‌شیک برای طعمی قوی‌تر.",
+ingredients:"شیر، قهوه، بستنی",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=85"
+},
+
+/* HOT */
+
+{
+id:"cappuccino",
+name:"کاپوچینو",
+category:"hot",
+price:350,
+description:"قهوه اسپرسو با شیر بخار داده‌شده و فوم.",
+ingredients:"اسپرسو، شیر",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+badge:"محبوب",
+image:"https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"latte",
+name:"لاته",
+category:"hot",
+price:400,
+description:"اسپرسو با شیر گرم و فوم.",
+ingredients:"اسپرسو، شیر",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"mocha",
+name:"موکا",
+category:"hot",
+price:450,
+description:"ترکیبی از اسپرسو، شکلات و شیر.",
+ingredients:"اسپرسو، شیر، شکلات",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"hot-chocolate",
+name:"هات چاکلت",
+category:"hot",
+price:400,
+description:"شکلات داغ و خامه‌ای.",
+ingredients:"شیر، شکلات، خامه",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"matcha",
+name:"ماچا لاته",
+category:"hot",
+price:450,
+description:"ماچا با شیر گرم و بافتی نرم.",
+ingredients:"ماچا، شیر",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+badge:"جدید",
+image:"https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=900&q=85"
+},
+
+/* COLD */
+
+{
+id:"iced-coffee",
+name:"آیس کافی",
+category:"cold",
+price:350,
+description:"قهوه خنک و پرانرژی با یخ.",
+ingredients:"قهوه، یخ",
+allergens:"نسخه پایه بدون شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"iced-latte",
+name:"آیس لاته",
+category:"cold",
+price:400,
+description:"لاته خنک با یخ.",
+ingredients:"اسپرسو، شیر، یخ",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"lemonade",
+name:"لیموناد",
+category:"cold",
+price:350,
+description:"نوشیدنی لیمویی خنک و تازه.",
+ingredients:"لیمو، آب، شکر، یخ",
+allergens:"موردی ندارد",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"iced-matcha",
+name:"آیس ماچا",
+category:"cold",
+price:450,
+description:"ماچا خنک با شیر و یخ.",
+ingredients:"ماچا، شیر، یخ",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=900&q=85"
+},
+
+/* FOOD */
+
+{
+id:"chicken-sandwich",
+name:"ساندویچ مرغ",
+category:"food",
+price:650,
+description:"ساندویچ مرغ با سبزیجات تازه و سس مخصوص.",
+ingredients:"مرغ، نان، کاهو، گوجه، سس",
+allergens:"ممکن است حاوی گلوتن و تخم‌مرغ باشد",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"crispy-burger",
+name:"برگر مرغ کریسپی",
+category:"food",
+price:800,
+description:"برگر مرغ ترد با سبزیجات و سس.",
+ingredients:"مرغ، نان، کاهو، سس",
+allergens:"حاوی گلوتن",
+rating:"★★★★★",
+badge:"پرفروش",
+image:"https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"cheese-toast",
+name:"نان تست پنیر",
+category:"food",
+price:450,
+description:"نان تست گرم با پنیر کش‌دار.",
+ingredients:"نان، پنیر",
+allergens:"حاوی شیر و گلوتن",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1528736235302-52922df5c122?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"chicken-wrap",
+name:"رپ مرغ",
+category:"food",
+price:650,
+description:"رپ مرغ با سبزیجات تازه.",
+ingredients:"مرغ، نان رپ، سبزیجات، سس",
+allergens:"حاوی گلوتن",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"veggie-wrap",
+name:"رپ سبزیجات",
+category:"food",
+price:550,
+description:"رپ سبک با سبزیجات تازه.",
+ingredients:"نان رپ، سبزیجات، سس",
+allergens:"حاوی گلوتن",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"pasta",
+name:"پاستا",
+category:"food",
+price:750,
+description:"پاستای گرم با سس مخصوص.",
+ingredients:"پاستا، سس، پنیر",
+allergens:"حاوی گلوتن و شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=900&q=85"
+},
+
+/* DESSERT */
+
+{
+id:"chocolate-cake",
+name:"کیک شکلاتی",
+category:"desserts",
+price:450,
+description:"کیک شکلاتی نرم با طعم غنی.",
+ingredients:"آرد، تخم‌مرغ، شکلات، شکر",
+allergens:"حاوی گلوتن و تخم‌مرغ",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"cheesecake",
+name:"چیزکیک",
+category:"desserts",
+price:500,
+description:"چیزکیک خامه‌ای با بافت نرم.",
+ingredients:"پنیر خامه‌ای، بیسکویت، شکر",
+allergens:"حاوی شیر و گلوتن",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"brownie",
+name:"براونی",
+category:"desserts",
+price:400,
+description:"براونی شکلاتی نرم و خوش‌طعم.",
+ingredients:"شکلات، آرد، تخم‌مرغ، شکر",
+allergens:"حاوی گلوتن و تخم‌مرغ",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"tiramisu",
+name:"تیرامیسو",
+category:"desserts",
+price:500,
+description:"دسر کلاسیک قهوه‌ای و خامه‌ای.",
+ingredients:"قهوه، ماسکارپونه، بیسکویت",
+allergens:"حاوی شیر و گلوتن",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"cookie",
+name:"کوکی شکلاتی",
+category:"desserts",
+price:300,
+description:"کوکی نرم با تکه‌های شکلات.",
+ingredients:"آرد، کره، شکلات، شکر",
+allergens:"حاوی گلوتن و شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=900&q=85"
+},
+
+/* SIDES */
+
+{
+id:"fries",
+name:"سیب‌زمینی سرخ‌کرده",
+category:"sides",
+price:350,
+description:"سیب‌زمینی طلایی و ترد.",
+ingredients:"سیب‌زمینی، روغن، نمک",
+allergens:"موردی ندارد",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"onion-rings",
+name:"حلقه پیاز",
+category:"sides",
+price:350,
+description:"حلقه‌های پیاز ترد و طلایی.",
+ingredients:"پیاز، آرد، ادویه",
+allergens:"حاوی گلوتن",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=900&q=85"
+},
+
+/* BREAKFAST */
+
+{
+id:"breakfast-toast",
+name:"صبحانه تست و تخم‌مرغ",
+category:"breakfast",
+price:500,
+description:"صبحانه ساده با نان تست و تخم‌مرغ.",
+ingredients:"تخم‌مرغ، نان تست",
+allergens:"حاوی تخم‌مرغ و گلوتن",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"pancakes",
+name:"پنکیک",
+category:"breakfast",
+price:500,
+description:"پنکیک نرم با میوه و شربت.",
+ingredients:"آرد، شیر، تخم‌مرغ، شربت",
+allergens:"حاوی شیر، تخم‌مرغ و گلوتن",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=900&q=85"
+},
+
+/* LIGHT */
+
+{
+id:"garden-salad",
+name:"سالاد تازه",
+category:"light",
+price:450,
+description:"سالاد سبک با سبزیجات تازه.",
+ingredients:"کاهو، گوجه، خیار، هویج",
+allergens:"بسته به سس",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=85"
+},
+
+/* MOCKTAILS */
+
+{
+id:"berry-mocktail",
+name:"موکتل بری",
+category:"mocktails",
+price:450,
+description:"نوشیدنی میوه‌ای خنک با طعم بری.",
+ingredients:"بری، لیمو، آب گازدار، یخ",
+allergens:"موردی ندارد",
+rating:"★★★★★",
+badge:"جدید",
+image:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"blue-mocktail",
+name:"موکتل آبی",
+category:"mocktails",
+price:500,
+description:"نوشیدنی خنک و رنگی با طعم مرکبات.",
+ingredients:"مرکبات، سیروپ، آب گازدار، یخ",
+allergens:"موردی ندارد",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=85"
+},
+
+/* ICE CREAM */
+
+{
+id:"vanilla-icecream",
+name:"بستنی وانیلی",
+category:"icecream",
+price:300,
+description:"بستنی کلاسیک وانیلی.",
+ingredients:"شیر، خامه، وانیل",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"chocolate-icecream",
+name:"بستنی شکلاتی",
+category:"icecream",
+price:350,
+description:"بستنی شکلاتی خامه‌ای.",
+ingredients:"شیر، خامه، شکلات",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+image:"https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=900&q=85"
+},
+
+/* KIDS */
+
+{
+id:"kids-choco",
+name:"شکلات داغ کوچک",
+category:"kids",
+price:300,
+description:"شکلات داغ با اندازه مناسب کودکان.",
+ingredients:"شیر، شکلات",
+allergens:"حاوی شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=900&q=85"
+},
+
+/* SPECIAL */
+
+{
+id:"moonlight-coffee",
+name:"قهوه مخصوص مون‌لایت",
+category:"specials",
+price:500,
+description:"ترکیب مخصوص قهوه برای دوستداران طعم‌های قوی.",
+ingredients:"اسپرسو، شیر، سیروپ مخصوص",
+allergens:"حاوی شیر",
+rating:"★★★★★",
+badge:"ویژه",
+image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"
+},
+
+/* MORE */
+
+{
+id:"garlic-bread",
+name:"نان سیر",
+category:"more",
+price:350,
+description:"نان گرم و برشته با کره سیر.",
+ingredients:"نان، کره، سیر، ادویه",
+allergens:"حاوی گلوتن و شیر",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1619531040571-7a7c2e0d9f7e?auto=format&fit=crop&w=900&q=85"
+},
+
+{
+id:"fruit-bowl",
+name:"کاسه میوه",
+category:"more",
+price:400,
+description:"ترکیبی از میوه‌های تازه.",
+ingredients:"میوه‌های فصل",
+allergens:"ممکن است بسته به میوه تغییر کند",
+rating:"★★★★☆",
+image:"https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=900&q=85"
+}
+
+];
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+const categories=[
+
+{id:"all",name:"همه",icon:"✨"},
+{id:"shakes",name:"میلک‌شیک",icon:"🥤"},
+{id:"hot",name:"نوشیدنی گرم",icon:"☕"},
+{id:"cold",name:"نوشیدنی سرد",icon:"🥤"},
+{id:"food",name:"غذا",icon:"🍔"},
+{id:"desserts",name:"دسر",icon:"🍰"},
+{id:"icecream",name:"بستنی",icon:"🍦"},
+{id:"sides",name:"مخلفات",icon:"🍟"},
+{id:"breakfast",name:"صبحانه",icon:"🥞"},
+{id:"light",name:"سبک",icon:"🥗"},
+{id:"mocktails",name:"موکتل",icon:"🍹"},
+{id:"kids",name:"کودکان",icon:"🧒"},
+{id:"specials",name:"ویژه مون‌لایت",icon:"🌙"},
+{id:"more",name:"بیشتر",icon:"➕"}
+
+];
+
+
+/* =========================
+   DOM
+========================= */
+
+const menuGrid=document.getElementById("menuGrid");
+const favoritesGrid=document.getElementById("favoritesGrid");
+const categoriesBox=document.getElementById("categories");
+const searchInput=document.getElementById("searchInput");
+const menuEmpty=document.getElementById("menuEmpty");
+const favoritesEmpty=document.getElementById("favoritesEmpty");
+
+const modal=document.getElementById("itemModal");
+const closeModal=document.getElementById("closeModal");
+const modalImage=document.getElementById("modalImage");
+const modalName=document.getElementById("modalName");
+const modalPrice=document.getElementById("modalPrice");
+const modalDescription=document.getElementById("modalDescription");
+const modalIngredients=document.getElementById("modalIngredients");
+const modalAllergens=document.getElementById("modalAllergens");
+const modalRating=document.getElementById("modalRating");
+const modalFavorite=document.getElementById("modalFavorite");
+const relatedGrid=document.getElementById("relatedGrid");
+
+const themeButton=document.getElementById("themeButton");
+const themePanel=document.getElementById("themePanel");
+const themeWrap=document.getElementById("themeWrap");
+
+const menuToggle=document.getElementById("menuToggle");
+const navLinks=document.getElementById("navLinks");
+
+const topBtn=document.getElementById("topBtn");
+
+
+/* =========================
+   STATE
+========================= */
+
+let currentCategory="all";
+let currentSearch="";
+let currentModalItem=null;
+
+// Load saved favorites safely (storage can be blocked or contain invalid data).
+function readSavedFavorites(){
+    try{
+        const saved=JSON.parse(
+            localStorage.getItem("moonlightFavoritesFA")||"[]"
+        );
+        return Array.isArray(saved)
+            ? saved.filter(id=>typeof id==="string")
+            : [];
+    }catch(error){
+        return [];
+    }
+}
+
+function saveFavorites(){
+    try{
+        localStorage.setItem(
+            "moonlightFavoritesFA",
+            JSON.stringify(favorites)
+        );
+    }catch(error){
+        // The menu still works for this visit if browser storage is unavailable.
+    }
+}
+
+let favorites=readSavedFavorites();
+
+
+/* =========================
+   PRICE FORMAT
+========================= */
+
+function formatPrice(price){
+
+    return new Intl.NumberFormat("fa-IR")
+        .format(price)+" تومن";
+
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+function renderCategories(){
+
+    categoriesBox.innerHTML="";
+
+    categories.forEach(category=>{
+
+        const button=document.createElement("button");
+
+        button.className=
+            "category-btn"+
+            (currentCategory===category.id?" active":"");
+
+        button.textContent=
+            `${category.icon} ${category.name}`;
+
+        button.addEventListener("click",()=>{
+
+            currentCategory=category.id;
+
+            renderCategories();
+            renderMenu();
+
+        });
+
+        categoriesBox.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function getFilteredItems(){
+
+    return menuItems.filter(item=>{
+
+        const categoryMatch=
+            currentCategory==="all"||
+            item.category===currentCategory;
+
+        const text=(
+            item.name+
+            " "+
+            item.description+
+            " "+
+            item.ingredients
+        ).toLowerCase();
+
+        const searchMatch=
+            !currentSearch||
+            text.includes(currentSearch.toLowerCase());
+
+        return categoryMatch&&searchMatch;
+
+    });
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+function createCard(item){
+
+    const isFavorite=
+        favorites.includes(item.id);
+
+    const card=document.createElement("article");
+
+    card.className="menu-card reveal";
+
+    card.innerHTML=`
+
+<div class="menu-image-wrap">
+
+<img
+src="${item.image}"
+alt="${item.name}"
+loading="lazy"
+>
+
+${
+item.badge
+?`<span class="badge">${item.badge}</span>`
+:""
+}
+
+<button
+class="favorite-btn ${isFavorite?"active":""}"
+data-favorite="${item.id}"
+>
+${isFavorite?"♥":"♡"}
+</button>
+
+</div>
+
+<div class="menu-info">
+
+<h3>${item.name}</h3>
+
+<p>${item.description}</p>
+
+<div class="menu-bottom">
+
+<span class="price">
+${formatPrice(item.price)}
+</span>
+
+<button
+class="details-btn"
+data-details="${item.id}"
+>
+جزئیات
+</button>
+
+</div>
+
+</div>
+`;
+
+    const image=card.querySelector("img");
+
+    image.addEventListener("error",()=>{
+
+        image.src=
+        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80";
+
+    });
+
+    card.querySelector("[data-favorite]")
+        .addEventListener("click",event=>{
+
+            event.stopPropagation();
+
+            toggleFavorite(item.id);
+
+        });
+
+    card.querySelector("[data-details]")
+        .addEventListener("click",()=>{
+
+            openModal(item);
+
+        });
+
+    return card;
+
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+function renderMenu(){
+
+    const items=getFilteredItems();
+
+    menuGrid.innerHTML="";
+
+    menuEmpty.style.display=
+        items.length?"none":"block";
+
+    items.forEach(item=>{
+
+        menuGrid.appendChild(
+            createCard(item)
+        );
+
+    });
+
+    observeReveals();
+
+}
+
+
+/* =========================
+   FAVORITES
+========================= */
+
+function toggleFavorite(id){
+
+    if(favorites.includes(id)){
+
+        favorites=
+            favorites.filter(
+                itemId=>itemId!==id
+            );
+
+    }else{
+
+        favorites.push(id);
+
+    }
+
+    saveFavorites();
+
+    renderMenu();
+    renderFavorites();
+
+    if(
+        currentModalItem&&
+        currentModalItem.id===id
+    ){
+
+        updateModalFavoriteButton();
+
+    }
+
+}
+
+
+function renderFavorites(){
+
+    favoritesGrid.innerHTML="";
+
+    const favoriteItems=
+        menuItems.filter(
+            item=>favorites.includes(item.id)
+        );
+
+    favoritesEmpty.style.display=
+        favoriteItems.length?"none":"block";
+
+    favoriteItems.forEach(item=>{
+
+        favoritesGrid.appendChild(
+            createCard(item)
+        );
+
+    });
+
+    observeReveals();
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(item){
+
+    currentModalItem=item;
+
+    modalImage.onerror=()=>{
+        modalImage.onerror=null;
+        modalImage.src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80";
+    };
+    modalImage.src=item.image;
+    modalImage.alt=item.name;
+
+    modalName.textContent=item.name;
+
+    modalPrice.textContent=
+        formatPrice(item.price);
+
+    modalDescription.textContent=
+        item.description;
+
+    modalIngredients.textContent=
+        "🥣 مواد تشکیل‌دهنده: "+
+        item.ingredients;
+
+    modalAllergens.textContent=
+        "⚠️ حساسیت‌ها: "+
+        item.allergens;
+
+    modalRating.textContent=
+        "⭐ امتیاز: "+
+        item.rating;
+
+    updateModalFavoriteButton();
+
+    renderRelated(item);
+
+    modal.classList.add("open");
+
+    document.body.style.overflow="hidden";
+
+}
+
+
+function updateModalFavoriteButton(){
+
+    if(!currentModalItem)return;
+
+    const active=
+        favorites.includes(
+            currentModalItem.id
+        );
+
+    modalFavorite.textContent=
+        active
+        ?"♥ حذف از علاقه‌مندی‌ها"
+        :"♡ افزودن به علاقه‌مندی‌ها";
+
+}
+
+
+function closeItemModal(){
+
+    modal.classList.remove("open");
+
+    document.body.style.overflow="";
+
+    currentModalItem=null;
+
+}
+
+
+closeModal.addEventListener(
+    "click",
+    closeItemModal
+);
+
+
+modal.addEventListener("click",event=>{
+
+    if(event.target===modal){
+        closeItemModal();
+    }
+
+});
+
+
+modalFavorite.addEventListener(
+    "click",
+    ()=>{
+
+        if(currentModalItem){
+            toggleFavorite(
+                currentModalItem.id
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   RELATED
+========================= */
+
+function renderRelated(item){
+
+    relatedGrid.innerHTML="";
+
+    const related=
+        menuItems
+        .filter(other=>
+            other.category===item.category&&
+            other.id!==item.id
+        )
+        .slice(0,3);
+
+    related.forEach(other=>{
+
+        const div=document.createElement("div");
+
+        div.className="related-item";
+
+        div.innerHTML=`
+
+<img
+src="${other.image}"
+alt="${other.name}"
+loading="lazy"
+>
+
+<span>
+${other.name}
+</span>
+`;
+
+        div.addEventListener(
+            "click",
+            ()=>openModal(other)
+        );
+
+        relatedGrid.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+searchInput.addEventListener(
+    "input",
+    event=>{
+
+        currentSearch=
+            event.target.value.trim();
+
+        renderMenu();
+
+    }
+);
+
+
+/* =========================
+   THEMES
+========================= */
+
+function applyTheme(theme){
+
+    document.body.classList.remove(
+        "theme-light",
+        "theme-ocean",
+        "theme-galaxy",
+        "theme-forest",
+        "theme-rose",
+        "theme-sunset",
+        "theme-sky"
+    );
+
+    if(theme!=="moonlight"){
+
+        document.body.classList.add(
+            "theme-"+theme
+        );
+
+    }
+
+    try{
+        localStorage.setItem(
+            "moonlightThemeFA",
+            theme
+        );
+    }catch(error){
+        // Theme changes still apply even when storage is unavailable.
+    }
+
+    document.querySelectorAll(
+        ".theme-option"
+    ).forEach(button=>{
+
+        button.classList.toggle(
+            "active",
+            button.dataset.theme===theme
+        );
+
+    });
+
+}
+
+
+const validThemes=[
+    "moonlight","light","ocean","galaxy",
+    "forest","rose","sunset","sky"
+];
+
+let savedTheme="moonlight";
+try{
+    const storedTheme=localStorage.getItem("moonlightThemeFA");
+    if(validThemes.includes(storedTheme)) savedTheme=storedTheme;
+}catch(error){
+    // Keep the default theme if browser storage is unavailable.
+}
+
+applyTheme(savedTheme);
+
+
+themeButton.addEventListener(
+    "click",
+    event=>{
+
+        event.stopPropagation();
+
+        themePanel.classList.toggle(
+            "open"
+        );
+
+    }
+);
+
+
+document.querySelectorAll(
+    ".theme-option"
+).forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            applyTheme(
+                button.dataset.theme
+            );
+
+            themePanel.classList.remove(
+                "open"
+            );
+
+        }
+    );
+
+});
+
+
+document.addEventListener(
+    "click",
+    event=>{
+
+        if(!themeWrap.contains(event.target)){
+
+            themePanel.classList.remove(
+                "open"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+menuToggle.addEventListener(
+    "click",
+    event=>{
+
+        event.stopPropagation();
+
+        navLinks.classList.toggle(
+            "open"
+        );
+
+    }
+);
+
+
+document.querySelectorAll(
+    ".nav-links a"
+).forEach(link=>{
+
+    link.addEventListener(
+        "click",
+        ()=>{
+            navLinks.classList.remove(
+                "open"
+            );
+        }
+    );
+
+});
+
+
+/* =========================
+   OPENING HOURS
+========================= */
+
+const openingHours={
+
+0:{open:"10:00",close:"23:00"},
+1:{open:"10:00",close:"23:00"},
+2:{open:"10:00",close:"23:00"},
+3:{open:"10:00",close:"23:00"},
+4:{open:"10:00",close:"23:00"},
+5:{open:"10:00",close:"23:00"},
+6:{open:"10:00",close:"23:00"}
+
+};
+
+
+function timeToMinutes(time){
+
+    const [hours,minutes]=
+        time.split(":").map(Number);
+
+    return hours*60+minutes;
+
+}
+
+
+function formatTime12(time){
+
+    let [hours,minutes]=
+        time.split(":").map(Number);
+
+    const period=
+        hours>=12
+        ?"بعدازظهر"
+        :"قبل‌ازظهر";
+
+    hours=
+        hours%12||12;
+
+    return `${new Intl.NumberFormat("fa-IR")
+        .format(hours)}:${String(minutes)
+        .padStart(2,"0")} ${period}`;
+
+}
+
+
+function updateOpeningStatus(){
+
+    const now=new Date();
+
+    const day=now.getDay();
+
+    const currentMinutes=
+        now.getHours()*60+
+        now.getMinutes();
+
+    const schedule=
+        openingHours[day];
+
+    const statusText=
+        document.getElementById(
+            "statusText"
+        );
+
+    const statusTime=
+        document.getElementById(
+            "statusTime"
+        );
+
+    const statusDot=
+        document.getElementById(
+            "statusDot"
+        );
+
+    const currentTime=
+        now.toLocaleTimeString(
+            "fa-IR",
+            {
+                hour:"numeric",
+                minute:"2-digit"
+            }
+        );
+
+    if(!schedule){
+
+        statusText.textContent=
+            "امروز تعطیل است";
+
+        statusDot.classList.add(
+            "closed"
+        );
+
+        statusTime.textContent=
+            `زمان محلی شما: ${currentTime}`;
+
+        return;
+
+    }
+
+    const open=
+        timeToMinutes(
+            schedule.open
+        );
+
+    const close=
+        timeToMinutes(
+            schedule.close
+        );
+
+    let isOpen;
+
+    if(close>open){
+
+        isOpen=
+            currentMinutes>=open&&
+            currentMinutes<close;
+
+    }else{
+
+        isOpen=
+            currentMinutes>=open||
+            currentMinutes<close;
+
+    }
+
+    if(isOpen){
+
+        statusText.textContent=
+            "باز است • بسته می‌شود در "+
+            formatTime12(
+                schedule.close
+            );
+
+        statusDot.classList.remove(
+            "closed"
+        );
+
+    }else{
+
+        statusText.textContent=
+            "بسته است • باز می‌شود در "+
+            formatTime12(
+                schedule.open
+            );
+
+        statusDot.classList.add(
+            "closed"
+        );
+
+    }
+
+    statusTime.textContent=
+        `زمان محلی شما: ${currentTime} • ساعت کاری: ${formatTime12(schedule.open)} تا ${formatTime12(schedule.close)}`;
+
+}
+
+
+updateOpeningStatus();
+
+setInterval(
+    updateOpeningStatus,
+    30000
+);
+
+
+/* =========================
+   REVEAL
+========================= */
+
+let revealObserver;
+
+function observeReveals(){
+
+    if(!("IntersectionObserver" in window)){
+
+        document
+        .querySelectorAll(".reveal")
+        .forEach(
+            element=>
+            element.classList.add(
+                "visible"
+            )
+        );
+
+        return;
+
+    }
+
+    if(!revealObserver){
+
+        revealObserver=
+            new IntersectionObserver(
+                entries=>{
+
+                    entries.forEach(entry=>{
+
+                        if(entry.isIntersecting){
+
+                            entry.target.classList.add(
+                                "visible"
+                            );
+
+                            revealObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    });
+
+                },
+                {
+                    threshold:.08
+                }
+            );
+
+    }
+
+    document
+    .querySelectorAll(
+        ".reveal:not(.visible)"
+    )
+    .forEach(
+        element=>
+        revealObserver.observe(element)
+    );
+
+}
+
+
+observeReveals();
+
+
+/* =========================
+   TOP
+========================= */
+
+window.addEventListener(
+    "scroll",
+    ()=>{
+
+        if(window.scrollY>500){
+
+            topBtn.classList.add("show");
+
+        }else{
+
+            topBtn.classList.remove("show");
+
+        }
+
+    }
+);
+
+
+topBtn.addEventListener(
+    "click",
+    ()=>{
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+);
+
+
+/* =========================
+   ESC
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        if(event.key==="Escape"){
+
+            closeItemModal();
+
+            themePanel.classList.remove(
+                "open"
+            );
+
+            navLinks.classList.remove(
+                "open"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+renderCategories();
+renderMenu();
+renderFavorites();
+
+</script>
+
+</body>
+</html>
